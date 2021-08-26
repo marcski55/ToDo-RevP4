@@ -16,8 +16,8 @@ export default function App() {
     <Provider store={Store}>
       <NavigationContainer theme={mainTheme}>
         <Stack.Navigator>
-          <Stack.Screen name='Main' component={Main} />
-          <Stack.Screen name='Detail' component={Detail} />
+          <Stack.Screen name='To Do List' component={Main} />
+          <Stack.Screen name='Details' component={Detail} />
         </Stack.Navigator>
         <StatusBar style='light' />
       </NavigationContainer>

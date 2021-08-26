@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Keyboard,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Text,
@@ -13,21 +13,65 @@ import styles from './styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 // ignore missing types complaint from ide
 import SimpleDateTime from 'react-simple-timestamp-to-date';
+import { useDispatch } from 'react-redux';
+import { DeleteTodo, UpdateTodo } from '../redux/actions/ListActions';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Detail({ route }: any) {
+  const navigation = useNavigation();
   const item = JSON.parse(JSON.stringify(route.params.item));
-  // const [keyboardState, setKeyboardState] = React.useState(false);
   const createdstamp = JSON.stringify(item.createdAt);
-  const created = createdstamp.substring(1, createdstamp.length - 1);
-  const updatedstamp = JSON.stringify(item.updatedAt);
-  const updated = updatedstamp.substring(1, updatedstamp.length - 1);
+  let created = createdstamp.replace(/"/g, '');
+  if (!created.includes('.')) {
+    created = (parseInt(created) / 1000).toString();
+  }
 
-  // Keyboard.addListener('keyboardWillShow', () => {
-  //   setKeyboardState(true);
-  // });
-  // Keyboard.addListener('keyboardWillHide', () => {
-  //   setKeyboardState(false);
-  // });
+  const updatedstamp = JSON.stringify(item.updatedAt);
+  let updated = updatedstamp.replace(/"/g, '');
+  if (!updated.includes('.')) {
+    updated = (parseInt(updated) / 1000).toString();
+  }
+
+  const [checkbox, setCheckbox] = useState('');
+  const [inputState, setInputState] = React.useState(item.text);
+  const dispatch = useDispatch();
+
+  const toggleChecked = () => {
+    dispatch(
+      UpdateTodo({
+        id: item.id,
+        text: item.text,
+        updatedAt: item.updatedAt,
+        createdAt: item.createdAt,
+        checked: !item.checked
+      })
+    );
+    navigation.goBack();
+  };
+  const deleteItem = () => {
+    dispatch(DeleteTodo(item.id));
+    navigation.goBack();
+  };
+  const updateItem = () => {
+    dispatch(
+      UpdateTodo({
+        id: item.id,
+        text: inputState,
+        updatedAt: item.updatedAt,
+        createdAt: item.createdAt,
+        checked: item.checked
+      })
+    );
+    navigation.goBack();
+  };
+
+  useEffect(() =>
+    setCheckbox(
+      item.checked
+        ? 'checkbox-marked-circle-outline'
+        : 'checkbox-blank-circle-outline'
+    )
+  );
 
   return (
     <KeyboardAvoidingView
@@ -37,38 +81,41 @@ export default function Detail({ route }: any) {
       })}
     >
       <View style={styles.detailbtnctr}>
-        {item.checked ? (
-          <TouchableOpacity>
-            <MaterialCommunityIcons
-              name='checkbox-marked-circle-outline'
-              color={styles.text.color}
-              size={30}
-              style={styles.addnewbutton}
-            />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity>
-            <MaterialCommunityIcons
-              name='checkbox-blank-circle-outline'
-              color={styles.text.color}
-              size={30}
-              style={styles.addnewbutton}
-            />
-          </TouchableOpacity>
-        )}
-        {/* {Platform.OS === 'ios' && keyboardState && (
-          <TouchableOpacity onPress={Keyboard.dismiss}>
-            <MaterialCommunityIcons
-              name='keyboard-off-outline'
-              color={styles.text.color}
-              size={30}
-              style={styles.addnewbutton}
-            />
-          </TouchableOpacity>
-        )} */}
-        <TouchableOpacity>
+        <TouchableOpacity onPress={toggleChecked}>
           <MaterialCommunityIcons
-            name='delete-circle'
+            name={checkbox}
+            color={styles.text.color}
+            size={30}
+            style={styles.addnewbutton}
+          />
+        </TouchableOpacity>
+        {/* Dangerous deletion w/o confirmation. Fix this! */}
+        <TouchableOpacity
+          onPress={() => {
+            Alert.alert('Really Delete?', "This action can't be undone.", [
+              {
+                text: 'Cancel',
+                style: 'cancel'
+              },
+              {
+                text: 'Yes. Final Answer.',
+                onPress: () => {
+                  deleteItem();
+                }
+              }
+            ]);
+          }}
+        >
+          <MaterialCommunityIcons
+            name='cancel'
+            color='#B6AC61'
+            size={30}
+            style={styles.addnewbutton}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={updateItem}>
+          <MaterialCommunityIcons
+            name='arrow-up-circle-outline'
             color={styles.text.color}
             size={30}
             style={styles.addnewbutton}
@@ -81,6 +128,10 @@ export default function Detail({ route }: any) {
         textAlignVertical='top'
         blurOnSubmit={true}
         returnKeyType='done'
+        maxLength={95000}
+        onChangeText={(enteredText) => {
+          setInputState(enteredText);
+        }}
       >
         {item.text}
       </TextInput>

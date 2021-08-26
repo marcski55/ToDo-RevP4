@@ -3,7 +3,7 @@ import { DefaultTheme } from '@react-navigation/native';
 import { baseProps } from 'react-native-gesture-handler/lib/typescript/handlers/gestureHandlers';
 
 const PALETTE = {
-  primary: '#6B7B9A',
+  primary: '#C6D0E5',
   background: '#2F3C57',
   card: '#465779',
   text: '#C6D0E5',
@@ -42,6 +42,11 @@ const styles = StyleSheet.create({
   },
   cardbox: {
     flexDirection: 'row'
+  },
+  checkedtext: {
+    textDecorationLine: 'line-through',
+    fontStyle: 'italic',
+    color: '#6B7B9A'
   },
   detailbtnctr: {
     flexDirection: 'row',

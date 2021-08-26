@@ -7,6 +7,7 @@ export type Todo = {
   id: string;
   checked: boolean;
   updatedAt: number;
+  createdAt: number;
 };
 
 export interface ListLoading {

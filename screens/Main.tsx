@@ -14,12 +14,13 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootStore } from '../redux/store/store';
 import styles from './styles';
-import { GetAllTodos } from '../redux/actions/ListActions';
+import { GetAllTodos, PostTodo } from '../redux/actions/ListActions';
 import LoadingComponent from '../components/LoadingComponent';
 import ItemComponent from '../components/ItemComponent';
 
 export default function Main() {
   const [isFetching, setIsFetching] = React.useState(false);
+  const [inputState, setInputState] = React.useState('');
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
@@ -38,6 +39,10 @@ export default function Main() {
     onRefresh();
   }, []);
 
+  const addItem = () => {
+    dispatch(PostTodo(inputState));
+  };
+
   const todoState = useSelector((state: RootStore) => state.list);
   const renderItem = ({ item }: { item: any }) => <ItemComponent item={item} />;
 
@@ -51,9 +56,7 @@ export default function Main() {
           <FlatList
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            data={todoState.list?.sort((a, b) =>
-              Number(a.updatedAt) < Number(b.updatedAt) ? 1 : -1
-            )}
+            data={todoState.list?.sort((a, b) => (a.text > b.text ? 1 : -1))}
             renderItem={renderItem}
             ListEmptyComponent={null}
             onRefresh={onRefresh}
@@ -73,10 +76,14 @@ export default function Main() {
             placeholderTextColor={styles.placeholder.color}
             style={styles.input}
             returnKeyType='done'
+            maxLength={95000}
+            onChangeText={(enteredText) => {
+              setInputState(enteredText);
+            }}
           />
-          <TouchableOpacity>
+          <TouchableOpacity onPress={addItem}>
             <MaterialCommunityIcons
-              name='plus-circle'
+              name='arrow-up-circle-outline'
               color={styles.text.color}
               size={30}
               style={styles.addnewbutton}
