@@ -22,13 +22,15 @@ export const mainTheme = {
 };
 
 const styles = StyleSheet.create({
-  root: {
-    backgroundColor: PALETTE.background,
-    flex: 1
+  addnew: {
+    flexDirection: 'row',
+    paddingBottom: DEFAULTPADDING,
+    marginBottom: Platform.select({ ios: 30 })
   },
-  text: {
-    color: PALETTE.text,
-    fontSize: BASEFONTSIZE
+  addnewbutton: {
+    flex: 1,
+    padding: DEFAULTPADDING,
+    marginTop: 10
   },
   card: {
     backgroundColor: PALETTE.card,
@@ -41,6 +43,14 @@ const styles = StyleSheet.create({
   cardbox: {
     flexDirection: 'row'
   },
+  detailbtnctr: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    height: Platform.select({ ios: 65, android: 70 })
+  },
+  detailtext: {
+    paddingTop: Platform.select({ ios: DEFAULTPADDING })
+  },
   input: {
     backgroundColor: PALETTE.text,
     color: PALETTE.card,
@@ -52,15 +62,13 @@ const styles = StyleSheet.create({
   placeholder: {
     color: PALETTE.notification
   },
-  addnew: {
-    flexDirection: 'row',
-    paddingBottom: DEFAULTPADDING,
-    marginBottom: Platform.select({ ios: 30 })
+  root: {
+    backgroundColor: PALETTE.background,
+    flex: 1
   },
-  addnewbutton: {
-    flex: 1,
-    padding: DEFAULTPADDING,
-    marginTop: 10
+  text: {
+    color: PALETTE.text,
+    fontSize: BASEFONTSIZE
   }
 });
 

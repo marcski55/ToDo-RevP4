@@ -72,6 +72,7 @@ export default function Main() {
             placeholder='What needs doing?'
             placeholderTextColor={styles.placeholder.color}
             style={styles.input}
+            returnKeyType='done'
           />
           <TouchableOpacity>
             <MaterialCommunityIcons
