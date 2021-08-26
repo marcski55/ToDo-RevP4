@@ -7,7 +7,9 @@ import {
   TextInput,
   TouchableOpacity,
   FlatList,
-  View
+  View,
+  SafeAreaView,
+  Platform
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RootStore } from '../redux/store/store';
@@ -37,14 +39,35 @@ export default function Main() {
   }, []);
 
   const todoState = useSelector((state: RootStore) => state.list);
+  const renderItem = ({ item }: { item: any }) => <ItemComponent item={item} />;
 
   if (todoState.loading === true) {
     return <LoadingComponent />;
   } else {
     return (
-      <KeyboardAvoidingView style={styles.root}>
-        <ItemComponent checked={true} text='This is an item' />
-        <View style={styles.addnew}>
+      <>
+        <SafeAreaView style={styles.root}>
+          {/* <ItemComponent checked={true} text='This is an item' /> */}
+          <FlatList
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+            data={todoState.list?.sort((a, b) =>
+              Number(a.updatedAt) < Number(b.updatedAt) ? 1 : -1
+            )}
+            renderItem={renderItem}
+            ListEmptyComponent={null}
+            onRefresh={onRefresh}
+            refreshing={isFetching}
+            keyExtractor={(item) => item.id}
+          />
+        </SafeAreaView>
+        <KeyboardAvoidingView
+          style={styles.addnew}
+          {...(Platform.OS === 'ios' && {
+            behavior: 'padding',
+            keyboardVerticalOffset: 100
+          })}
+        >
           <TextInput
             placeholder='What needs doing?'
             placeholderTextColor={styles.placeholder.color}
@@ -58,8 +81,8 @@ export default function Main() {
               style={styles.addnewbutton}
             />
           </TouchableOpacity>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </>
     );
   }
 }

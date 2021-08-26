@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
 import { DefaultTheme } from '@react-navigation/native';
 import { baseProps } from 'react-native-gesture-handler/lib/typescript/handlers/gestureHandlers';
 
@@ -38,6 +38,9 @@ const styles = StyleSheet.create({
     fontSize: BASEFONTSIZE,
     flex: 1
   },
+  cardbox: {
+    flexDirection: 'row'
+  },
   input: {
     backgroundColor: PALETTE.text,
     color: PALETTE.card,
@@ -50,7 +53,9 @@ const styles = StyleSheet.create({
     color: PALETTE.notification
   },
   addnew: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    paddingBottom: DEFAULTPADDING,
+    marginBottom: Platform.select({ ios: 30 })
   },
   addnewbutton: {
     flex: 1,
