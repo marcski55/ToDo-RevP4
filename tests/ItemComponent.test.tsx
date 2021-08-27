@@ -1,4 +1,7 @@
 import { mount } from 'enzyme';
+import React from 'react';
+import { View, Text, TextInputComponent, Platform } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ItemComponent from '../components/ItemComponent';
 import testItem from './TestItem';
 
@@ -23,5 +26,23 @@ describe('test item component', () => {
 
   it('should be there', () => {
     expect(wrapper).not.toBe(undefined);
+  });
+
+  it('should have correct text', () => {
+    expect(
+      wrapper.contains(
+        <View>
+          <Text>{testItem.text}</Text>
+        </View>
+      )
+    ).toBeTruthy;
+  });
+
+  it('should have chosen the correct checkbox', () => {
+    const checkbox = testItem.checked
+      ? 'checkbox-marked-circle-outline'
+      : 'checkbox-blank-circle-outline';
+    expect(wrapper.contains(<MaterialCommunityIcons name={checkbox} />))
+      .toBeTruthy;
   });
 });
