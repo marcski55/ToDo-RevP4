@@ -15,6 +15,7 @@ import styles from './styles';
 import { GetAllTodos, PostTodo } from '../redux/actions/ListActions';
 import LoadingComponent from '../components/LoadingComponent';
 import ItemComponent from '../components/ItemComponent';
+import { TODO_LOADING } from '../redux/types/ListActionsTypes';
 
 export default function Main() {
   const [isFetching, setIsFetching] = React.useState(false);

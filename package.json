@@ -24,8 +24,7 @@
     "react-simple-timestamp-to-date": "^1.0.3",
     "redux-devtools-extension": "^2.13.9",
     "redux-saga": "^1.1.3",
-    "redux-thunk": "^2.3.0",
-    "undefined": "react-native-vector-icons/"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
