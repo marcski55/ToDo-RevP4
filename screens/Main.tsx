@@ -3,11 +3,9 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   KeyboardAvoidingView,
-  Text,
   TextInput,
   TouchableOpacity,
   FlatList,
-  View,
   SafeAreaView,
   Platform
 } from 'react-native';

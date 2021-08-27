@@ -1,6 +1,5 @@
 import { StyleSheet, Platform } from 'react-native';
 import { DefaultTheme } from '@react-navigation/native';
-import { baseProps } from 'react-native-gesture-handler/lib/typescript/handlers/gestureHandlers';
 
 const PALETTE = {
   primary: '#C6D0E5',
