@@ -10,26 +10,27 @@ import {
 } from 'react-native';
 import styles from './styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-// ignore missing types complaint from ide
-import SimpleDateTime from 'react-simple-timestamp-to-date';
 import { useDispatch } from 'react-redux';
 import { DeleteTodo, UpdateTodo } from '../redux/actions/ListActions';
 import { useNavigation } from '@react-navigation/native';
+import { formatTimestamp } from './formatTimestamp';
 
 export default function Detail({ route }: any) {
   const navigation = useNavigation();
   const item = JSON.parse(JSON.stringify(route.params.item));
   const createdstamp = JSON.stringify(item.createdAt);
   let created = createdstamp.replace(/"/g, '');
-  if (!created.includes('.')) {
-    created = (parseInt(created) / 1000).toString();
+  if (created.includes('.')) {
+    created = (parseFloat(created) * 1000).toString();
   }
+  const createdDate = new Date(parseInt(created));
 
   const updatedstamp = JSON.stringify(item.updatedAt);
   let updated = updatedstamp.replace(/"/g, '');
-  if (!updated.includes('.')) {
-    updated = (parseInt(updated) / 1000).toString();
+  if (updated.includes('.')) {
+    updated = (parseFloat(updated) * 1000).toString();
   }
+  const updatedDate = new Date(parseInt(updated));
 
   const [checkbox, setCheckbox] = useState('');
   const [inputState, setInputState] = React.useState(item.text);
@@ -140,25 +141,8 @@ export default function Detail({ route }: any) {
           { flex: 0, paddingBottom: Platform.select({ ios: 45 }) }
         ]}
       >
-        Created:{' '}
-        <SimpleDateTime
-          dateFormat='MDY'
-          dateSeparator='/'
-          timeSeparator=':'
-          meridians='1'
-        >
-          {created}
-        </SimpleDateTime>
-        {'\n'}
-        Last Updated:{' '}
-        <SimpleDateTime
-          dateFormat='MDY'
-          dateSeparator='/'
-          timeSeparator=':'
-          meridians='1'
-        >
-          {updated}
-        </SimpleDateTime>
+        {'Created: ' + formatTimestamp(createdDate) + '\n'}
+        {'Last Updated: ' + formatTimestamp(updatedDate)}
       </Text>
     </KeyboardAvoidingView>
   );
