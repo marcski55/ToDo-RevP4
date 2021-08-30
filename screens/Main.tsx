@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   KeyboardAvoidingView,
@@ -15,13 +14,11 @@ import styles from './styles';
 import { GetAllTodos, PostTodo } from '../redux/actions/ListActions';
 import LoadingComponent from '../components/LoadingComponent';
 import ItemComponent from '../components/ItemComponent';
-import { TODO_LOADING } from '../redux/types/ListActionsTypes';
 
 export default function Main() {
   const [isFetching, setIsFetching] = React.useState(false);
   const [inputState, setInputState] = React.useState('');
   const dispatch = useDispatch();
-  const navigation = useNavigation();
 
   // get all items from db
   const fetchData = () => {
