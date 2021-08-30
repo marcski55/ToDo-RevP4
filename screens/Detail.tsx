@@ -14,23 +14,17 @@ import { useDispatch } from 'react-redux';
 import { DeleteTodo, UpdateTodo } from '../redux/actions/ListActions';
 import { useNavigation } from '@react-navigation/native';
 import { formatTimestamp } from './formatTimestamp';
+import { convertTextToTimestamp } from './convertTextToTimestamp';
 
 export default function Detail({ route }: any) {
   const navigation = useNavigation();
   const item = JSON.parse(JSON.stringify(route.params.item));
-  const createdstamp = JSON.stringify(item.createdAt);
-  let created = createdstamp.replace(/"/g, '');
-  if (created.includes('.')) {
-    created = (parseFloat(created) * 1000).toString();
-  }
-  const createdDate = new Date(parseInt(created));
-
-  const updatedstamp = JSON.stringify(item.updatedAt);
-  let updated = updatedstamp.replace(/"/g, '');
-  if (updated.includes('.')) {
-    updated = (parseFloat(updated) * 1000).toString();
-  }
-  const updatedDate = new Date(parseInt(updated));
+  const createdDate = new Date(
+    convertTextToTimestamp(JSON.stringify(item.createdAt))
+  );
+  const updatedDate = new Date(
+    convertTextToTimestamp(JSON.stringify(item.updatedAt))
+  );
 
   const [checkbox, setCheckbox] = useState('');
   const [inputState, setInputState] = React.useState(item.text);
