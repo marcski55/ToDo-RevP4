@@ -15,6 +15,7 @@ import { GetAllTodos, PostTodo } from '../redux/actions/ListActions';
 import LoadingComponent from '../components/LoadingComponent';
 import ItemComponent from '../components/ItemComponent';
 import { convertTextToTimestamp } from './convertTextToTimestamp';
+import { Todo } from '../redux/types/ListActionsTypes';
 
 export default function Main() {
   const [isFetching, setIsFetching] = React.useState(false);
@@ -42,6 +43,34 @@ export default function Main() {
 
   const todoState = useSelector((state: RootStore) => state.list);
   const renderItem = ({ item }: { item: any }) => <ItemComponent item={item} />;
+  const renderData: Todo[] = todoState.list
+    ? [
+        todoState.list
+          ?.filter((elem) => !elem.checked)
+          .sort((a, b) =>
+            convertTextToTimestamp(JSON.stringify(a.updatedAt)) >
+            convertTextToTimestamp(JSON.stringify(b.updatedAt))
+              ? 1
+              : -1
+          ),
+        todoState.list
+          ?.filter((elem) => elem.checked)
+          .sort((a, b) =>
+            convertTextToTimestamp(JSON.stringify(a.updatedAt)) >
+            convertTextToTimestamp(JSON.stringify(b.updatedAt))
+              ? 1
+              : -1
+          )
+      ].flat()
+    : [
+        {
+          text: 'There is no data',
+          id: 'Error',
+          checked: false,
+          createdAt: '1630359647',
+          updatedAt: '1630359647'
+        }
+      ];
 
   if (todoState.loading === true) {
     return <LoadingComponent />;
@@ -57,29 +86,12 @@ export default function Main() {
           <FlatList
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            data={[
-              todoState.list
-                ?.filter((elem) => !elem.checked)
-                .sort((a, b) =>
-                  convertTextToTimestamp(JSON.stringify(a.updatedAt)) >
-                  convertTextToTimestamp(JSON.stringify(b.updatedAt))
-                    ? 1
-                    : -1
-                ),
-              todoState.list
-                ?.filter((elem) => elem.checked)
-                .sort((a, b) =>
-                  convertTextToTimestamp(JSON.stringify(a.updatedAt)) >
-                  convertTextToTimestamp(JSON.stringify(b.updatedAt))
-                    ? 1
-                    : -1
-                )
-            ].flat()}
+            data={renderData}
             renderItem={renderItem}
             ListEmptyComponent={null}
             onRefresh={onRefresh}
             refreshing={isFetching}
-            keyExtractor={(item) => item.text}
+            keyExtractor={(item: Todo) => item.id}
           />
         </SafeAreaView>
         <KeyboardAvoidingView
