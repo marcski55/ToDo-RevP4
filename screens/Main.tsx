@@ -61,7 +61,7 @@ export default function Main() {
               todoState.list
                 ?.filter((elem) => !elem.checked)
                 .sort((a, b) =>
-                  convertTextToTimestamp(JSON.stringify(a.updatedAt)) <
+                  convertTextToTimestamp(JSON.stringify(a.updatedAt)) >
                   convertTextToTimestamp(JSON.stringify(b.updatedAt))
                     ? 1
                     : -1
@@ -69,7 +69,7 @@ export default function Main() {
               todoState.list
                 ?.filter((elem) => elem.checked)
                 .sort((a, b) =>
-                  convertTextToTimestamp(JSON.stringify(a.updatedAt)) <
+                  convertTextToTimestamp(JSON.stringify(a.updatedAt)) >
                   convertTextToTimestamp(JSON.stringify(b.updatedAt))
                     ? 1
                     : -1
@@ -79,7 +79,7 @@ export default function Main() {
             ListEmptyComponent={null}
             onRefresh={onRefresh}
             refreshing={isFetching}
-            keyExtractor={(item) => item.id}
+            keyExtractor={(item) => item.text}
           />
         </SafeAreaView>
         <KeyboardAvoidingView
