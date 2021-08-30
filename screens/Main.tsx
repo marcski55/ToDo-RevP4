@@ -14,6 +14,7 @@ import styles from './styles';
 import { GetAllTodos, PostTodo } from '../redux/actions/ListActions';
 import LoadingComponent from '../components/LoadingComponent';
 import ItemComponent from '../components/ItemComponent';
+import { convertTextToTimestamp } from './convertTextToTimestamp';
 
 export default function Main() {
   const [isFetching, setIsFetching] = React.useState(false);
@@ -48,11 +49,32 @@ export default function Main() {
     return (
       <>
         <SafeAreaView style={styles.root}>
-          {/* <ItemComponent checked={true} text='This is an item' /> */}
+          {/* 
+            The filter, sort, and flat work together to separate the list into
+            complete and incomplete, then sort each section by date. The flat
+            is needed as data needs no nesting to work.
+          */}
           <FlatList
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
-            data={todoState.list?.sort((a, b) => (a.text > b.text ? 1 : -1))}
+            data={[
+              todoState.list
+                ?.filter((elem) => !elem.checked)
+                .sort((a, b) =>
+                  convertTextToTimestamp(JSON.stringify(a.updatedAt)) <
+                  convertTextToTimestamp(JSON.stringify(b.updatedAt))
+                    ? 1
+                    : -1
+                ),
+              todoState.list
+                ?.filter((elem) => elem.checked)
+                .sort((a, b) =>
+                  convertTextToTimestamp(JSON.stringify(a.updatedAt)) <
+                  convertTextToTimestamp(JSON.stringify(b.updatedAt))
+                    ? 1
+                    : -1
+                )
+            ].flat()}
             renderItem={renderItem}
             ListEmptyComponent={null}
             onRefresh={onRefresh}
